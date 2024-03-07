@@ -1,6 +1,6 @@
 # Memorable Places - Flutter App
 
-![Memorable Places](VIDEO_b462a747-a88f-439a-89d5-7338185b9ede.mp4)
+![Memorable Places](https://github.com/Sampurn44/favourite_place/assets/92144348/0df45509-ec0e-4881-8596-a3c391dbf18d)
 
 Memorable Places is the ultimate Flutter app designed to help you capture and cherish your favorite locations effortlessly. Whether it's a stunning view, a cozy cafe, or a delightful restaurant, this app allows you to save your most cherished places with just a simple photo. Keep your memories alive and easily revisit your favorite spots using the integrated Google Maps functionality.
 
