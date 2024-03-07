@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LocationInput extends StatefulWidget {
   const LocationInput({super.key, required this.onselectedlocation});
@@ -28,21 +29,51 @@ class _LocationInputState extends State<LocationInput> {
     final lat = _pickedlocation!.latitude;
     final lon = _pickedlocation!.longitude;
 
-    return 'https://maps.googleapis.com/maps/api/staticmap?center$lat,$lon=&zoom=13&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:L%7C$lat,$lon&key=AIzaSyARV2-k5JdaOXqKutgUtg2Ozr9DlUaPzkU';
+    return 'https://maps.googleapis.com/maps/api/staticmap?center$lat,$lon=&zoom=13&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:L%7C$lat,$lon&key=${dotenv.env['API_KEY']}';
   }
 
   void _saveplace(double latitude, double longitude) async {
     final url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyARV2-k5JdaOXqKutgUtg2Ozr9DlUaPzkU');
-    final response = await http.get(url);
-    final resddata = json.decode(response.body);
-    final address = resddata['results'][0]['formatted_address'];
-    setState(() {
-      _pickedlocation = PlaceLocation(
-          latitude: latitude, longitude: longitude, address: address);
-      isgettinglocation = false;
-    });
-    widget.onselectedlocation(_pickedlocation!);
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=${dotenv.env['API_KEY']}');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final resddata = json.decode(response.body);
+        print(resddata);
+
+        // Check if 'results' array exists and is not empty
+        if (resddata.containsKey('results') &&
+            resddata['results'] is List &&
+            resddata['results'].isNotEmpty) {
+          final address = resddata['results'][0]['formatted_address'];
+
+          setState(() {
+            _pickedlocation = PlaceLocation(
+              latitude: latitude,
+              longitude: longitude,
+              address: address,
+            );
+            isgettinglocation = false;
+          });
+
+          widget.onselectedlocation(_pickedlocation!);
+        } else {
+          // Handle the case where 'results' array is empty or doesn't exist
+          print('Error: No results found in the geocoding response.');
+          // You might want to display an error message to the user or take appropriate action.
+        }
+      } else {
+        // Handle HTTP error (status code other than 200)
+        print('Error: ${response.statusCode} - ${response.reasonPhrase}');
+        // You might want to display an error message to the user or take appropriate action.
+      }
+    } catch (error) {
+      // Handle other errors (e.g., network errors)
+      print('Error: $error');
+      // You might want to display an error message to the user or take appropriate action.
+    }
   }
 
   void getcurrentlocation() async {
