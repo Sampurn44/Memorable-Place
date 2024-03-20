@@ -1,4 +1,4 @@
-# Memorable Places - Flutter App
+# Memorable Place - Flutter App
 
 https://github.com/Sampurn44/favourite_place/assets/92144348/0df45509-ec0e-4881-8596-a3c391dbf18d
 
