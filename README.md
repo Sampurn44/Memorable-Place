@@ -1,5 +1,5 @@
 # Memorable Place - Flutter App
-(logo-no-background.png)
+![Trustique Logo](https://github.com/Sampurn44/Memorable-Place/blob/master/logo-no-background.png)
 
 https://github.com/Sampurn44/favourite_place/assets/92144348/0df45509-ec0e-4881-8596-a3c391dbf18d
 
